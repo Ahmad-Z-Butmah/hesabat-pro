@@ -1,0 +1,49 @@
+/* ============================================================
+   متغيّرات نظام التصميم (تُعرّف مرة واحدة وتُستخدم في كل مكان)
+   ============================================================ */
+:root {
+  /* العلامة والألوان */
+  --brand: #2563eb;
+  --brand-hover: #1d4fd0;
+  --brand-soft: #eef4ff;
+  --navy: #0e2a4e;
+
+  --ok: #10b981;
+  --ok-ink: #0e9268;
+  --ok-soft: #ecfdf5;
+
+  --warn: #f59e0b;
+  --warn-ink: #b4780a;
+  --warn-soft: #fef6e7;
+
+  --danger: #ef4444;
+  --danger-ink: #dc2626;
+  --danger-soft: #feecec;
+
+  /* المحايدة */
+  --canvas: #f4f7fb;
+  --card: #ffffff;
+  --ink: #0f1b2d;
+  --slate: #51637a;
+  --muted: #93a1b5;
+  --line: #e6ecf3;
+  --line-2: #f0f4f9;
+
+  /* الحواف */
+  --r-sm: 8px;
+  --r-md: 11px;
+  --r-card: 16px;
+  --r-pill: 999px;
+
+  /* الظلال */
+  --shadow-header: 0 1px 2px rgba(15, 33, 71, 0.05);
+  --shadow-card: 0 8px 22px rgba(15, 33, 74, 0.06);
+  --shadow-btn: 0 8px 16px rgba(36, 87, 235, 0.28);
+  --shadow-pop: 0 30px 70px rgba(8, 20, 51, 0.35);
+
+  /* التخطيط */
+  --content: 1440px;
+  --gutter: 48px;
+
+  --font: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+}

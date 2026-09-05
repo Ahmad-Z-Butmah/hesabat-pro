@@ -1,0 +1,121 @@
+.bp { display: flex; flex-direction: column; gap: 22px; }
+.bp__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.bp__stats--5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1200px) { .bp__stats--5 { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1000px) { .bp__stats, .bp__stats--5 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .bp__stats, .bp__stats--5 { grid-template-columns: 1fr; } }
+
+/* بطاقة إحصائية */
+.bp-stat { display: flex; align-items: center; gap: 15px; background: #fff; border: 1px solid var(--line); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 18px; }
+.bp-stat__icon { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.bp-stat__icon--sold { background: var(--danger-soft); }
+.bp-stat__icon--reserved { background: var(--warn-soft); }
+.bp-stat__icon--available { background: var(--ok-soft); }
+.bp-stat__icon--blue { background: var(--brand-soft); }
+.bp-stat__icon--green { background: var(--ok-soft); }
+.bp-stat__icon--purple { background: #ede9fe; }
+.bp-stat__value { font-size: 26px; font-weight: 800; line-height: 1; }
+.bp-stat__value--sold { color: var(--danger); }
+.bp-stat__value--reserved { color: var(--warn); }
+.bp-stat__value--available { color: var(--ok); }
+.bp-stat__value--blue { color: var(--brand); }
+.bp-stat__value--green { color: var(--ok-ink); }
+.bp-stat__value--purple { color: #7c3aed; }
+.bp-stat__label { margin-top: 3px; font-size: 12.5px; font-weight: 500; color: var(--muted); }
+
+/* بطاقة عامة */
+.bp-card { background: #fff; border: 1px solid var(--line); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 22px; }
+.bp-card__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.bp-card__title { font-size: 16px; font-weight: 800; color: var(--ink); }
+.bp-card__sub { margin-top: 4px; font-size: 12px; color: var(--muted); }
+
+/* شريط الأدوات */
+.bp-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.bp-toolbar__btns { display: flex; gap: 10px; }
+
+/* ملخص الأنواع */
+.bp-summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+@media (max-width: 1200px) { .bp-summary { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .bp-summary { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .bp-summary { grid-template-columns: 1fr; } }
+
+.bp-sum { background: #fff; border: 1px solid var(--line); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.bp-sum--blue { border-top: 3px solid var(--brand); }
+.bp-sum--amber { border-top: 3px solid var(--warn); }
+.bp-sum--green { border-top: 3px solid var(--ok); }
+.bp-sum--purple { border-top: 3px solid #8b5cf6; }
+.bp-sum--parking { border-top: 3px solid var(--slate); }
+.bp-sum__head { display: flex; align-items: center; gap: 8px; }
+.bp-sum__icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: var(--line-2); }
+.bp-sum--blue .bp-sum__icon { background: var(--brand-soft); }
+.bp-sum--amber .bp-sum__icon { background: var(--warn-soft); }
+.bp-sum--green .bp-sum__icon { background: var(--ok-soft); }
+.bp-sum--purple .bp-sum__icon { background: #ede9fe; }
+.bp-sum--parking .bp-sum__icon { background: #eef2f7; }
+.bp-sum__title { font-size: 13.5px; font-weight: 800; color: var(--ink); }
+.bp-sum__total { font-size: 24px; font-weight: 800; color: var(--ink); line-height: 1; }
+.bp-sum__rows { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; }
+.bp-sum__rows .is-ok { color: var(--ok-ink); }
+.bp-sum__rows .is-warn { color: var(--warn-ink); }
+.bp-sum__rows .is-danger { color: var(--danger); }
+
+/* سطر الموقف المخصص */
+.bp-item__parking { font-size: 12px; font-weight: 700; color: var(--muted); }
+.bp-item__parking.is-linked { color: var(--ok-ink); }
+
+/* حالة فارغة / تحميل / خطأ */
+.bp-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 60px 22px; }
+.bp-state__icon { font-size: 44px; }
+.bp-empty__title { font-size: 18px; font-weight: 800; color: var(--ink); }
+.bp-empty__hint { font-size: 13px; color: var(--muted); max-width: 420px; }
+.bp-state--error { color: var(--danger); }
+
+/* أقسام الوحدات */
+.bp-sections { display: grid; grid-template-columns: 1fr; gap: 22px; }
+.bp-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 1100px) { .bp-list { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .bp-list { grid-template-columns: 1fr; } }
+
+/* عنصر وحدة / موقف */
+.bp-item { border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; background: #fff; }
+.bp-item--blue { border-color: rgba(37,99,235,.25); background: #f5f8ff; }
+.bp-item--amber { border-color: rgba(245,158,11,.28); background: #fffaf0; }
+.bp-item--green { border-color: rgba(16,185,129,.25); background: #f2fbf7; }
+.bp-item--purple { border-color: rgba(124,58,237,.25); background: #f7f4ff; }
+.bp-item__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bp-item__no { font-size: 15px; font-weight: 800; color: var(--ink); }
+.bp-item__meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
+.bp-item__buyer { font-size: 12px; color: var(--warn-ink); font-weight: 600; }
+.bp-item__actions { display: flex; gap: 8px; margin-top: 2px; }
+.bp-item__actions button { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--brand); cursor: pointer; }
+.bp-item__actions button:hover { background: var(--brand-soft); }
+.bp-item__actions button.is-danger { color: var(--danger); }
+.bp-item__actions button.is-danger:hover { background: var(--danger-soft); }
+.bp-item__actions button.is-sale { color: var(--ok-ink); border-color: rgba(16,185,129,.35); background: var(--ok-soft); }
+.bp-item__actions button.is-sale:hover { background: var(--ok); color: #fff; }
+
+/* مواقف */
+.bp-list--parking { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1200px) { .bp-list--parking { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 1000px) { .bp-list--parking { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .bp-list--parking { grid-template-columns: repeat(2, 1fr); } }
+.bp-park-item { border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; background: #fff; }
+.bp-park-item.is-free { border-color: #dde5ee; background: #eef2f7; }
+.bp-park-item.is-sold { border-color: rgba(239,68,68,.3); background: var(--danger-soft); }
+
+/* شارة حالة */
+.bp-pill { border-radius: var(--r-pill); padding: 3px 10px; font-size: 10.5px; font-weight: 700; color: #fff; }
+.bp-pill--available { background: var(--ok); }
+.bp-pill--reserved { background: var(--warn); }
+.bp-pill--sold { background: var(--danger); }
+.bp-pill--plain { background: #e4e9f0; color: var(--slate); }
+
+/* نموذج مودال */
+.bp-form { display: flex; flex-direction: column; gap: 16px; }
+.bp-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 520px) { .bp-form__grid { grid-template-columns: 1fr; } }
+.bp-form__error { background: var(--danger-soft); color: var(--danger); border-radius: 10px; padding: 10px 12px; font-size: 12.5px; font-weight: 600; }
+.bp-delete-text { font-size: 14.5px; color: var(--ink); line-height: 1.7; }
+.bp-check { display: flex; gap: 22px; }
+.bp-check label { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--slate); cursor: pointer; }
+.bp-check input { accent-color: var(--brand); }

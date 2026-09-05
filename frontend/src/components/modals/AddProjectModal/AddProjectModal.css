@@ -1,0 +1,7 @@
+.apm { display: flex; flex-direction: column; gap: 18px; }
+.apm__types { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.apm__type { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; height: 78px; border-radius: 12px; border: 1.4px solid var(--line); background: #fff; color: var(--slate); font-size: 12.5px; font-weight: 500; transition: all .15s ease; }
+.apm__type span { color: var(--ink); }
+.apm__type.is-active { border: 2px solid var(--brand); background: var(--brand-soft); color: var(--brand); }
+.apm__type.is-active span { color: var(--brand); font-weight: 700; }
+.apm__two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

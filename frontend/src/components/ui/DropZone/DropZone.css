@@ -1,0 +1,17 @@
+.dropzone {
+  display: flex; align-items: center; justify-content: center;
+  gap: 9px; cursor: pointer; text-align: center;
+  border: 1.5px dashed #cdd9e8; border-radius: var(--r-md);
+  background: #f7fafd; color: #8497ad;
+  font-size: 12.5px; font-weight: 600;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.dropzone:hover { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+.dropzone__icon { font-size: 18px; }
+/* block: عمودي وبارتفاع أكبر */
+.dropzone--block { flex-direction: column; height: 120px; gap: 6px; }
+.dropzone--block .dropzone__icon { font-size: 26px; }
+.dropzone--block .dropzone__text { font-size: 12px; font-weight: 700; }
+.dropzone__hint { font-size: 10.5px; font-weight: 500; }
+/* compact: صف قصير */
+.dropzone--compact { height: 64px; }

@@ -1,0 +1,13 @@
+.topnav { height: 72px; background: #fff; border-bottom: 1px solid var(--line); box-shadow: var(--shadow-header); }
+.topnav__inner { position: relative; height: 100%; display: flex; align-items: center; justify-content: space-between; }
+.topnav__brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.topnav__logo { width: 40px; height: 40px; border-radius: 12px; background: var(--navy); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+.topnav__brand-name { font-size: 18px; font-weight: 800; color: var(--ink); }
+.topnav__nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 30px; }
+.topnav__link { font-size: 15px; font-weight: 500; color: var(--slate); }
+.topnav__link.is-active { color: var(--brand); font-weight: 700; }
+.topnav__user { display: flex; align-items: center; gap: 14px; }
+.topnav__icon-btn { width: 40px; height: 40px; border-radius: var(--r-sm); background: var(--canvas); color: var(--slate); display: inline-flex; align-items: center; justify-content: center; }
+.topnav__divider { width: 1px; height: 22px; background: var(--line); }
+.topnav__user-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.topnav__chevron { color: var(--muted); display: inline-flex; }

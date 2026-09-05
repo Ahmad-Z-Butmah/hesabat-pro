@@ -1,0 +1,4 @@
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; flex-shrink: 0;
+}

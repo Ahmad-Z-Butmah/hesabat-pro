@@ -1,0 +1,43 @@
+/* ============================================================
+   إعادة ضبط عامة + أساسيات + حركات
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; }
+
+body {
+  font-family: var(--font);
+  background: var(--canvas);
+  color: var(--ink);
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+table { border-collapse: collapse; }
+
+/* حاويات مشتركة */
+.page { min-height: 100vh; background: var(--canvas); }
+.container {
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* حركات خفيفة */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.97) translateY(8px); } to { opacity: 1; transform: none; } }
+.animate-fade { animation: fadeIn 0.25s ease; }
+.animate-pop { animation: pop 0.2s ease; }
+
+/* طباعة/تصدير PDF: عناصر التنقل والتحكم تُخفى، المحتوى فقط يُطبع */
+.print-only { display: none; }
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block; }
+  .page, .container { background: #fff; max-width: 100%; padding: 0; }
+}

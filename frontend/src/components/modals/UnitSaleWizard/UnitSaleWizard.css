@@ -1,0 +1,112 @@
+/* ====== Unit Sale Wizard ====== */
+.usw { display: flex; flex-direction: column; gap: 18px; }
+
+/* مؤشر الخطوات */
+.usw__steps { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+.usw__step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative; }
+.usw__step:not(:last-child)::after {
+  content: ''; position: absolute; top: 13px; right: calc(50% + 14px); left: calc(-50% + 14px);
+  height: 2px; background: var(--line); border-radius: 2px;
+}
+.usw__step.is-active::after, .usw__step.is-done::after { background: var(--brand); }
+.usw__step-dot {
+  width: 28px; height: 28px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; border: 2px solid var(--line); color: var(--muted);
+  font-size: 12px; font-weight: 800; z-index: 1;
+}
+.usw__step.is-active .usw__step-dot { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+.usw__step.is-done .usw__step-dot { border-color: var(--ok); color: #fff; background: var(--ok); }
+.usw__step-label { font-size: 11px; font-weight: 700; color: var(--muted); }
+.usw__step.is-active .usw__step-label { color: var(--ink); }
+
+/* بطاقة الوحدة */
+.usw__unit {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  background: #f6f9ff; border: 1px solid rgba(37,99,235,.18); border-radius: 14px; padding: 12px 16px;
+}
+.usw__unit-name { font-size: 16px; font-weight: 800; color: var(--ink); }
+.usw__unit-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--muted); font-weight: 600; }
+.usw__pill { border-radius: var(--r-pill); padding: 3px 10px; font-size: 10.5px; font-weight: 700; color: #fff; }
+.usw__pill--available { background: var(--ok); }
+.usw__pill--reserved { background: var(--warn); }
+.usw__pill--sold { background: var(--danger); }
+
+.usw__body { display: flex; flex-direction: column; gap: 14px; }
+
+/* شبكة حقول */
+.usw__grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .usw__grid2 { grid-template-columns: 1fr; } }
+
+/* البحث عن الأطراف */
+.usw__matches { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-top: -6px; }
+.usw__match {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
+  padding: 10px 14px; background: #fff; border: none; border-bottom: 1px solid var(--line);
+  cursor: pointer; text-align: right;
+}
+.usw__match:last-child { border-bottom: none; }
+.usw__match:hover { background: var(--brand-soft); }
+.usw__match-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.usw__match-phone { font-size: 11.5px; color: var(--muted); }
+.usw__selected {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--ok-soft); border: 1px solid rgba(16,185,129,.3); color: var(--ok-ink);
+  border-radius: 10px; padding: 10px 14px; font-size: 12.5px;
+}
+.usw__selected button { border: none; background: transparent; color: var(--brand); font-size: 12px; font-weight: 700; cursor: pointer; }
+
+/* تلميحات وأخطاء */
+.usw__hint { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.usw__error {
+  background: var(--danger-soft); color: var(--danger); border-radius: 10px;
+  padding: 9px 12px; font-size: 12px; font-weight: 600;
+}
+.usw__none {
+  border: 1px dashed var(--line); border-radius: 12px; padding: 22px; text-align: center;
+  font-size: 13px; color: var(--muted); font-weight: 600; background: #fbfcfe;
+}
+
+/* ملخص المبالغ */
+.usw__totals {
+  border: 1px solid var(--line); border-radius: 12px; background: #fbfcfe; padding: 12px 16px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.usw__totals-row { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--slate); font-weight: 600; }
+.usw__totals-row b { font-size: 13px; color: var(--ink); }
+.usw__totals-row--strong b { font-size: 15px; color: var(--brand); }
+.usw__totals-row.is-warn b { color: var(--warn); }
+
+/* بطاقات الشيكات */
+.usw__cheques { display: flex; flex-direction: column; gap: 14px; }
+.usw__cheque { border: 1px solid var(--line); border-radius: 14px; padding: 16px; background: #fff; display: flex; flex-direction: column; gap: 12px; }
+.usw__cheque-head { font-size: 13px; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.usw__cheque-head::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--brand);
+}
+
+/* رفع الملفات */
+.usw__file { display: block; cursor: pointer; }
+.usw__file input { display: none; }
+.usw__file-empty {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1.5px dashed #cdd9e8; border-radius: 12px; background: #f7fafd;
+  padding: 18px; font-size: 12.5px; font-weight: 700; color: #8497ad; text-align: center;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.usw__file:hover .usw__file-empty { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+.usw__file img { max-height: 130px; width: 100%; object-fit: contain; border: 1px solid var(--line); border-radius: 10px; background: #fbfcfe; }
+.usw__file-ok { display: block; text-align: center; font-size: 13px; font-weight: 700; color: var(--ok-ink); padding: 16px; }
+.usw__file-meta { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.usw__file-clear { border: none; background: transparent; color: var(--danger); font-size: 12px; font-weight: 700; cursor: pointer; text-align: right; }
+.usw__file-clear:hover { text-decoration: underline; }
+.usw__contract-title { font-size: 15px; font-weight: 800; color: var(--ink); }
+
+/* المراجعة */
+.usw__review { display: flex; flex-direction: column; gap: 12px; }
+.usw__review-title { font-size: 12px; font-weight: 800; color: var(--brand); padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+.usw__review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+@media (max-width: 520px) { .usw__review-grid { grid-template-columns: 1fr; } }
+.usw__review-grid div { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.usw__review-grid span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.usw__review-grid b { font-size: 13px; color: var(--ink); font-weight: 800; }

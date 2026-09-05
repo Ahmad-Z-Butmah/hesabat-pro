@@ -1,0 +1,696 @@
+{
+  "name": "Infinity - Gmail Check Reminder Tomorrow",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "download": true
+        }
+      },
+      "id": "14585a83-b780-4786-8a02-e845fadbd65e",
+      "name": "Telegram Media Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        160
+      ],
+      "webhookId": "0d4181b5-44b8-4185-8824-9ea9b3321932",
+      "credentials": {
+        "telegramApi": {
+          "id": "MtaeICXhGOrx7yUg",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "has-media",
+              "leftValue": "={{!!($json.message?.photo || $json.message?.document || $json.message?.video || $binary?.data)}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "64897dc3-6635-41b7-b806-24483cbc0e61",
+      "name": "IF Has Media",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "name": "={{$json.message?.document?.file_name || 'telegram-media-' + Date.now()}}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{$env.GOOGLE_DRIVE_ROOT_FOLDER_ID}}"
+        },
+        "options": {}
+      },
+      "id": "f5cbfee2-a676-4b55-977d-c270b57197fd",
+      "name": "Upload To Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        208,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = $('Telegram Media Trigger').item.json.message || {};\nconst drive = $json || {};\nreturn [{\n  json: {\n    file_url: drive.webViewLink || drive.webContentLink || drive.url || '',\n    file_name: msg.document?.file_name || drive.name || 'telegram-media',\n    mime_type: msg.document?.mime_type || drive.mimeType || '',\n    ocr_text: msg.caption || '',\n    chat_id: String(msg.chat?.id || ''),\n    note: 'OCR placeholder: replace this node with OpenAI Vision or Google Vision output when ready.'\n  }\n}];"
+      },
+      "id": "1371238c-b105-496c-a6e4-3c7765f199b0",
+      "name": "Prepare OCR Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.BACKEND_PUBLIC_URL}}/api/n8n/media-uploaded",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-n8n-secret",
+              "value": "={{$env.N8N_WEBHOOK_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify($json)}}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "48ddd02a-ddf2-4039-ae54-45f5da261b2f",
+      "name": "POST Media To Infinity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$('Prepare OCR Payload').item.json.chat_id}}",
+        "text": "={{$json.reply || 'تم رفع الملف ومعالجته'}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "2cb5e2db-64c1-46e6-ab0f-4d787f8c6917",
+      "name": "Reply Media Result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1056,
+        64
+      ],
+      "webhookId": "7cea58be-5a06-4a4f-84fe-a8f33c5d30ab",
+      "credentials": {
+        "telegramApi": {
+          "id": "MtaeICXhGOrx7yUg",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{$json.message?.chat?.id}}",
+        "text": "أرسل صورة أو ملف حتى أرفعه وأعالجه.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "c6f0c0c6-bacb-421d-bc87-b04809fab6b5",
+      "name": "Reply No Media",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        288
+      ],
+      "webhookId": "784dd3c0-0d78-4e2c-b363-9c6d9963e9c8",
+      "credentials": {
+        "telegramApi": {
+          "id": "MtaeICXhGOrx7yUg",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "5567b958-279e-4c26-b2e7-ba3ecfea9c58",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        480
+      ],
+      "webhookId": "b780c7b9-2328-45c2-a5af-ca95746428ac",
+      "credentials": {
+        "telegramApi": {
+          "id": "MtaeICXhGOrx7yUg",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = $json.message || {};\nreturn [{\n  json: {\n    message: msg.text || msg.caption || '',\n    chat_id: String(msg.chat?.id || ''),\n    username: msg.from?.username || msg.from?.first_name || '',\n    source: 'telegram'\n  }\n}];"
+      },
+      "id": "87d52490-0919-436a-b89b-8b264c626885",
+      "name": "Normalize Telegram Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.BACKEND_PUBLIC_URL}}/api/n8n/telegram-message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-n8n-secret",
+              "value": "={{$env.N8N_WEBHOOK_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify($json)}}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "6ba97167-49e9-403d-8c99-a7edd2f21702",
+      "name": "POST Infinity Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        176,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$('Normalize Telegram Message').item.json.chat_id}}",
+        "text": "={{$json.reply || $json.result?.reply || 'تم استلام الرسالة'}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "6161cd7a-52ba-4917-b6a9-8f73bbce6c34",
+      "name": "Reply To Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        464
+      ],
+      "webhookId": "9f27a59e-40fb-4849-9048-9bc5db29f826",
+      "credentials": {
+        "telegramApi": {
+          "id": "MtaeICXhGOrx7yUg",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "a5e7a7b7-8aa0-400f-95d6-e5fb512e622c",
+      "name": "Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -432,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.BACKEND_PUBLIC_URL}}/api/sync/google-sheets/export",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-n8n-secret",
+              "value": "={{$env.N8N_WEBHOOK_SECRET}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "5c143174-dd27-4c26-b490-b42b31bc451b",
+      "name": "Export From Infinity Backend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const tabs = $json.tabs || {};\nconst output = [];\nfor (const [moduleSlug, payload] of Object.entries(tabs)) {\n  const fields = payload.fields || [];\n  const rows = payload.rows || [];\n  for (const row of rows) {\n    const flat = { module: moduleSlug, id: row.id };\n    for (const field of fields) {\n      flat[field.label || field.key] = row[field.key] ?? '';\n    }\n    flat.created_at = row.created_at || '';\n    flat.updated_at = row.updated_at || '';\n    output.push({ json: flat });\n  }\n}\nreturn output.length ? output : [{ json: { module: 'empty', message: 'No rows to sync' } }];"
+      },
+      "id": "a9ab1b7f-2d02-4ac1-8ac1-7de1f9c281f0",
+      "name": "Flatten Tabs For Sheets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{$env.GOOGLE_SHEETS_SPREADSHEET_ID}}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Infinity Export"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "id": "b25321ce-8921-4286-ae9a-a49d600cd9db",
+      "name": "Append Or Update Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "00164907-7512-4a61-81df-daa3ca17a048",
+      "name": "Daily 9 AM Asia Jerusalem",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.BACKEND_PUBLIC_URL}}/api/n8n/check-reminders/tomorrow",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-n8n-secret",
+              "value": "={{$env.N8N_WEBHOOK_SECRET}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "740710a5-ea4e-46ae-93d3-bf328eebb976",
+      "name": "GET Tomorrow Checks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "has-checks",
+              "leftValue": "={{Number($json.count || 0)}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3b8caa35-4d0e-4d84-8e77-c406b2c483cf",
+      "name": "IF Checks Exist",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        48,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const checks = $json.checks || [];\nconst lines = checks.map(c => `#${c.id} | ${c.bank || ''} | رقم ${c.check_number || ''} | ${Number(c.amount || 0).toLocaleString('ar')} ${c.currency || 'ILS'} | حامل: ${c.current_holder || ''} | حالة: ${c.status || ''}`);\nreturn [{\n  json: {\n    check_ids: checks.map(c => c.id),\n    subject: `Infinity - تذكير شيكات مستحقة غدًا (${checks.length})`,\n    html: `<h2>شيكات مستحقة غدًا</h2><p>عدد الشيكات: ${checks.length}</p><pre>${lines.join('\\n')}</pre>`,\n    text: `شيكات مستحقة غدًا\\n\\n${lines.join('\\n')}`\n  }\n}];"
+      },
+      "id": "dfd579d6-ed82-4c68-940e-1bf1e9cb2cf8",
+      "name": "Build Reminder Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$env.REMINDER_EMAIL_TO || $env.GMAIL_TO || 'admin@example.com'}}",
+        "subject": "={{$json.subject}}",
+        "message": "={{$json.html}}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "f4e25eac-d9ca-4aa8-89e0-8ed383983139",
+      "name": "Send Gmail Reminder",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        512,
+        768
+      ],
+      "webhookId": "infinity-gmail-check-reminder"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.BACKEND_PUBLIC_URL}}/api/n8n/check-reminders/mark-sent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-n8n-secret",
+              "value": "={{$env.N8N_WEBHOOK_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify({ check_ids: $('Build Reminder Email').item.json.check_ids })}}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "0ab14ad0-6f79-4799-9309-79672442a03d",
+      "name": "Mark Reminder Sent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        848,
+        768
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Media Trigger": {
+      "main": [
+        [
+          {
+            "node": "IF Has Media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Media": {
+      "main": [
+        [
+          {
+            "node": "Upload To Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reply No Media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload To Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Prepare OCR Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare OCR Payload": {
+      "main": [
+        [
+          {
+            "node": "POST Media To Infinity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Media To Infinity": {
+      "main": [
+        [
+          {
+            "node": "Reply Media Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Telegram Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Telegram Message": {
+      "main": [
+        [
+          {
+            "node": "POST Infinity Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Infinity Backend": {
+      "main": [
+        [
+          {
+            "node": "Reply To Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every 6 Hours": {
+      "main": [
+        [
+          {
+            "node": "Export From Infinity Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export From Infinity Backend": {
+      "main": [
+        [
+          {
+            "node": "Flatten Tabs For Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatten Tabs For Sheets": {
+      "main": [
+        [
+          {
+            "node": "Append Or Update Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily 9 AM Asia Jerusalem": {
+      "main": [
+        [
+          {
+            "node": "GET Tomorrow Checks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Tomorrow Checks": {
+      "main": [
+        [
+          {
+            "node": "IF Checks Exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Checks Exist": {
+      "main": [
+        [
+          {
+            "node": "Build Reminder Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Reminder Email": {
+      "main": [
+        [
+          {
+            "node": "Send Gmail Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Gmail Reminder": {
+      "main": [
+        [
+          {
+            "node": "Mark Reminder Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1219532b-d135-47f5-9297-06f08cfc7384",
+  "meta": {
+    "instanceId": "f5ab59725d9f11b518b7f96f1dc0e711e1468ac54b6f645955ee9d469ab4d1f2"
+  },
+  "id": "zWM5B0bGLAm9NIdM",
+  "tags": [
+    {
+      "updatedAt": "2026-06-07T08:12:52.326Z",
+      "createdAt": "2026-06-07T08:12:52.326Z",
+      "id": "MbXtXLiYvfQsSuO2",
+      "name": "Infinity"
+    }
+  ]
+}
